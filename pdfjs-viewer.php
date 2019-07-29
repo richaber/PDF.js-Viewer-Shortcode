@@ -6,7 +6,7 @@ Description: Embed PDFs with the gorgeous PDF.js viewer - Forked by Thomas McMah
 Version: 1.4
 Author: Ben Lawson
 Author URI: http://byterevel.com/
-License: GPLv2
+License: GPLv3
 */
 
 
