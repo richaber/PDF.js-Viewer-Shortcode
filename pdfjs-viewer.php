@@ -23,28 +23,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-//==== Shortcode ====
+/**
+ * PdfJs Shortcode callback.
+ *
+ * @param array  $attr    The shortcode attributes.
+ * @param string $content The shortcode content (if any).
+ * @param string $tag     The name of the shortcode.
+ *
+ * @return string
+ */
+function pdfjs_shortcode_handler( $attr, $content, $tag ) {
 
-//tell wordpress to register the pdfjs-viewer shortcode
-add_shortcode("pdfjs-viewer", "pdfjs_handler");
+	/**
+	 * Combine user attributes with known attributes and fill in defaults when needed.
+	 */
+	$attr = shortcode_atts(
+		array(
+			'url'           => '',
+			'viewer_height' => '1360px',
+			'viewer_width'  => '100%',
+			'fullscreen'    => 'true',
+			'download'      => 'true',
+			'print'         => 'true',
+			'openfile'      => 'false',
+		),
+		$attr
+	);
 
-function pdfjs_handler($incoming_from_post) {
-  //set defaults
-  $incoming_from_post=shortcode_atts(array(
-    'url' => 'bad-url.pdf',
-    'viewer_height' => '1360px',
-    'viewer_width' => '100%',
-    'fullscreen' => 'true',
-    'download' => 'true',
-    'print' => 'true',
-    'openfile' => 'false'
-  ), $incoming_from_post);
-
-  $pdfjs_output = pdfjs_generator($incoming_from_post);
-
-  //send back text to replace shortcode in post
-  return $pdfjs_output;
+	return pdfjs_generator( $attr );
 }
+
+add_shortcode( 'pdfjs-viewer', 'pdfjs_shortcode_handler' );
 
 function pdfjs_generator($incoming_from_handler) {
   $viewer_base_url= plugins_url( 'resources/js/pdfjs/web/viewer.html', __FILE__ );
