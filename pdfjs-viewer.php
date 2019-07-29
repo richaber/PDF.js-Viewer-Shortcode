@@ -102,13 +102,16 @@ function pdfjs_generator( $attr ) {
 	);
 }
 
-//==== Media Button ====
-
-//priority is 12 since default button is 10
-add_action('media_buttons', 'pdfjs_media_button', 12);
+/**
+ * Add the media button.
+ *
+ * Priority is 12 since default button is 10.
+ */
 function pdfjs_media_button() {
-    echo '<a href="#" id="insert-pdfjs" class="button">Add PDF</a>';
+	echo '<a href="#" id="insert-pdfjs" class="button">' . esc_html__( 'Add PDF', 'pdfjs-viewer-shortcode' ) . '</a>';
 }
+
+add_action( 'media_buttons', 'pdfjs_media_button', 12 );
 
 add_action('wp_enqueue_media', 'include_pdfjs_media_button_js_file');
 function include_pdfjs_media_button_js_file() {
