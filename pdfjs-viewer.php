@@ -55,39 +55,51 @@ function pdfjs_shortcode_handler( $attr, $content, $tag ) {
 
 add_shortcode( 'pdfjs-viewer', 'pdfjs_shortcode_handler' );
 
-function pdfjs_generator($incoming_from_handler) {
-  $viewer_base_url= plugins_url( 'resources/js/pdfjs/web/viewer.html', __FILE__ );
+/**
+ * Construct the markup for the shortcode to return.
+ *
+ * @param array $attr The shortcode attributes.
+ *
+ * @return string
+ */
+function pdfjs_generator( $attr ) {
+	/**
+	 * The URL to the PDF.js viewer.
+	 *
+	 * @var string $viewer_url
+	 */
+	$viewer_url = add_query_arg(
+		array(
+			'file'     => pdfjs_encode_uri_component( $attr['url'] ),
+			'download' => ( 'true' === $attr['download'] ) ? 'true' : 'false',
+			'print'    => ( 'true' === $attr['print'] ) ? 'true' : 'false',
+			'openfile' => ( 'true' === $attr['openfile'] ) ? 'true' : 'false',
+		),
+		plugins_url( 'resources/js/pdfjs/web/viewer.html', PDFJS_FILE )
+	);
 
+	/**
+	 * Anchor markup to the fullscreen viewer.
+	 *
+	 * @var $fullscreen_link
+	 */
+	$fullscreen_link = '';
 
-  $file_name = $incoming_from_handler["url"];
-  $viewer_height = $incoming_from_handler["viewer_height"];
-  $viewer_width = $incoming_from_handler["viewer_width"];
-  $fullscreen = $incoming_from_handler["fullscreen"];
-  $download = $incoming_from_handler["download"];
-  $print = $incoming_from_handler["print"];
-  $openfile = $incoming_from_handler["openfile"];
+	if ( 'true' === $attr['fullscreen'] ) {
+		$fullscreen_link = sprintf(
+			'<a href="%1$s">%2$s</a><br />',
+			esc_url( $viewer_url ),
+			esc_html__( 'View Fullscreen', 'pdfjs-viewer-shortcode' )
+		);
+	}
 
-  if ($download != 'true') {
-      $download = 'false';
-  }
-
-  if ($print != 'true') {
-      $print = 'false';
-  }
-
-  if ($openfile != 'true') {
-      $openfile = 'false';
-  }
-
-  $final_url = $viewer_base_url."?file=".$file_name."&download=".$download."&print=".$print."&openfile=".$openfile;
-
-  $fullscreen_link = '';
-  if($fullscreen == 'true'){
-       $fullscreen_link = '<a href="'.$final_url.'">View Fullscreen</a><br>';
-  }
-  $iframe_code = '<iframe width="'.$viewer_width.'" height="'.$viewer_height.'" src="'.$final_url.'" ></iframe> ';
-
-  return $fullscreen_link.$iframe_code;
+	return sprintf(
+		'%1$s<iframe width="%2$s" height="%3$s" src="%4$s" ></iframe>',
+		$fullscreen_link,
+		esc_attr( $attr['viewer_width'] ),
+		esc_attr( $attr['viewer_height'] ),
+		esc_url( $viewer_url )
+	);
 }
 
 //==== Media Button ====
