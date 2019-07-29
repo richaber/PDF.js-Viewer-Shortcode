@@ -34,7 +34,7 @@ function pdfjs_handler($incoming_from_post) {
 }
 
 function pdfjs_generator($incoming_from_handler) {
-  $viewer_base_url= plugins_url()."/pdfjs-viewer-shortcode/pdfjs/web/viewer.html";
+  $viewer_base_url= plugins_url( 'resources/js/pdfjs/web/viewer.html', __FILE__ );
 
 
   $file_name = $incoming_from_handler["url"];
@@ -78,7 +78,7 @@ function pdfjs_media_button() {
 
 add_action('wp_enqueue_media', 'include_pdfjs_media_button_js_file');
 function include_pdfjs_media_button_js_file() {
-    wp_enqueue_script('media_button', plugins_url().'/pdfjs-viewer-shortcode/pdfjs-media-button.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('media_button', plugins_url( 'resources/js/pdfjs-media-button.js', __FILE__ ), array('jquery'), '1.0', true);
 }
 
 ?>
