@@ -80,5 +80,3 @@ add_action('wp_enqueue_media', 'include_pdfjs_media_button_js_file');
 function include_pdfjs_media_button_js_file() {
     wp_enqueue_script('media_button', plugins_url( 'resources/js/pdfjs-media-button.js', __FILE__ ), array('jquery'), '1.0', true);
 }
-
-?>
