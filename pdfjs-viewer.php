@@ -1,14 +1,20 @@
 <?php
-/*
-Plugin Name: PDFjs Viewer
-Plugin URI: http://byterevel.com/
-Description: Embed PDFs with the gorgeous PDF.js viewer - Forked by Thomas McMahon
-Version: 1.4
-Author: Ben Lawson
-Author URI: http://byterevel.com/
-License: GPLv3
-*/
-
+/**
+ * Plugin Name:       PDFjs Viewer
+ * Plugin URI:        https://byterevel.com
+ * Description:       Embed PDFs with the gorgeous PDF.js viewer
+ * Version:           1.4
+ * Requires at least: 4.9
+ * Requires PHP:      5.6
+ * Author:            Ben Lawson
+ * Author URI:        https://byterevel.com
+ * License:           GPLv3
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:       pdfjs-viewer-shortcode
+ * Domain Path:       /languages
+ *
+ * @package           PdfJsViewer
+ */
 
 //==== Shortcode ====
 
