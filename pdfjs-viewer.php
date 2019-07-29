@@ -120,10 +120,20 @@ function pdfjs_media_button() {
 
 add_action( 'media_buttons', 'pdfjs_media_button', 12 );
 
-add_action('wp_enqueue_media', 'include_pdfjs_media_button_js_file');
-function include_pdfjs_media_button_js_file() {
-	wp_enqueue_script('media_button', plugins_url( 'resources/js/pdfjs-media-button.js', __FILE__ ), array('jquery'), '1.0', true);
+/**
+ * Include the media button handler script.
+ */
+function pdfjs_include_media_button_js_file() {
+	wp_enqueue_script(
+		'media_button',
+		plugins_url( 'resources/js/pdfjs-media-button.js', PDFJS_FILE ),
+		array( 'jquery' ),
+		'1.0',
+		true
+	);
 }
+
+add_action( 'wp_enqueue_media', 'pdfjs_include_media_button_js_file' );
 
 /**
  * Encode URL compatible with JavaScript's encodeURIComponent.
