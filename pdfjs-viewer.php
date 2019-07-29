@@ -102,3 +102,44 @@ add_action('wp_enqueue_media', 'include_pdfjs_media_button_js_file');
 function include_pdfjs_media_button_js_file() {
     wp_enqueue_script('media_button', plugins_url( 'resources/js/pdfjs-media-button.js', __FILE__ ), array('jquery'), '1.0', true);
 }
+
+/**
+ * Encode URL compatible with JavaScript's encodeURIComponent.
+ *
+ * PHP's rawurlencode escapes all non-alphanumeric characters except,
+ * -_.~
+ *
+ * JavaScript's encodeURIComponent escapes all non-alphanumeric characters except the following,
+ * -_.!~*'()
+ *
+ * According to PDF.js documentation,
+ * "the path of the PDF file to use (must be on the same server due to JavaScript limitations).
+ * Please notice that the path/URL must be encoded using encodeURIComponent."
+ *
+ * @link https://github.com/mozilla/pdf.js/wiki/Viewer-options
+ *
+ * @param string $url The URL to encode. This should be a raw, unencoded URL.
+ *
+ * @return string
+ */
+function pdfjs_encode_uri_component( $url ) {
+	if ( empty( $url ) ) {
+		return '';
+	}
+
+	/**
+	 * Characters that JS' encodeURIComponent does not encode,
+	 * but PHP's rawurlencode does.
+	 *
+	 * @var array $revert
+	 */
+	$unescape = array(
+		'%21' => '!',
+		'%2A' => '*',
+		'%27' => "'",
+		'%28' => '(',
+		'%29' => ')',
+	);
+
+	return strtr( rawurlencode( $url ), $unescape );
+}
