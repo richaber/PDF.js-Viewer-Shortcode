@@ -16,6 +16,13 @@
  * @package           PdfJsViewer
  */
 
+/**
+ * Exit early if directly accessed via URL.
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 //==== Shortcode ====
 
 //tell wordpress to register the pdfjs-viewer shortcode
