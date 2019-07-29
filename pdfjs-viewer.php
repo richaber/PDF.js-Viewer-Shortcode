@@ -47,6 +47,7 @@ function pdfjs_shortcode_handler( $attr, $content, $tag ) {
 	$attr = shortcode_atts(
 		array(
 			'url'           => '',
+			'title'         => __( 'Embedded PDF Document', 'pdfjs-viewer-shortcode' ),
 			'viewer_height' => '1360px',
 			'viewer_width'  => '100%',
 			'fullscreen'    => 'true',
@@ -101,11 +102,12 @@ function pdfjs_generator( $attr ) {
 	}
 
 	return sprintf(
-		'%1$s<iframe width="%2$s" height="%3$s" src="%4$s" ></iframe>',
+		'%1$s<iframe width="%2$s" height="%3$s" src="%4$s" title="%5$s"></iframe>',
 		$fullscreen_link,
 		esc_attr( $attr['viewer_width'] ),
 		esc_attr( $attr['viewer_height'] ),
-		esc_url( $viewer_url )
+		esc_url( $viewer_url ),
+		esc_attr( $attr['title'] )
 	);
 }
 
