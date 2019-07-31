@@ -113,6 +113,8 @@ function pdfjs_block_init() {
 			),
 		)
 	);
+
+	wp_set_script_translations( 'pdfjs-block-editor', 'pdfjs-viewer-shortcode' );
 }
 
 add_action( 'init', 'pdfjs_block_init' );
