@@ -39,7 +39,7 @@ define( 'PDFJS_FILE', __FILE__ );
  *
  * @return string
  */
-function pdfjs_shortcode_handler( $attr, $content, $tag ) {
+function pdfjs_shortcode_handler( $attr = array(), $content = '', $tag = '' ) {
 
 	/**
 	 * Combine user attributes with known attributes and fill in defaults when needed.
@@ -50,10 +50,14 @@ function pdfjs_shortcode_handler( $attr, $content, $tag ) {
 			'title'         => __( 'Embedded PDF Document', 'pdfjs-viewer-shortcode' ),
 			'viewer_height' => '1360px',
 			'viewer_width'  => '100%',
-			'fullscreen'    => 'true',
-			'download'      => 'true',
-			'print'         => 'true',
-			'openfile'      => 'false',
+			'fullscreen'    => true,
+			'download'      => true,
+			'print'         => true,
+			'openfile'      => false,
+			'page'          => 1,
+			'zoom'          => null,
+			'nameddest'     => null,
+			'pagemode'      => 'none',
 		),
 		$attr
 	);
@@ -79,12 +83,61 @@ function pdfjs_generator( $attr ) {
 	$viewer_url = add_query_arg(
 		array(
 			'file'     => pdfjs_encode_uri_component( $attr['url'] ),
-			'download' => ( 'true' === $attr['download'] ) ? 'true' : 'false',
-			'print'    => ( 'true' === $attr['print'] ) ? 'true' : 'false',
-			'openfile' => ( 'true' === $attr['openfile'] ) ? 'true' : 'false',
+			'download' => pdfjs_bool_to_string( $attr['download'] ),
+			'print'    => pdfjs_bool_to_string( $attr['print'] ),
+			'openfile' => pdfjs_bool_to_string( $attr['openfile'] ),
 		),
-		plugins_url( 'resources/js/pdfjs/web/viewer.html', PDFJS_FILE )
+		plugins_url( 'resources/js/pdfjs/web/viewer.php', PDFJS_FILE )
 	);
+
+	/**
+	 * Fragment Identifiers to append to the Viewer URL.
+	 *
+	 * @var array $fragments
+	 */
+	$fragments = array();
+
+	/**
+	 * Array of whitelisted fragment identifier keys.
+	 *
+	 * @var array $fragment_identifier_keys
+	 */
+	$fragment_identifier_keys = array(
+		'page',
+		'zoom',
+		'nameddest',
+		'pagemode',
+	);
+
+	/**
+	 * Loop through the frag id keys to see if we have an attribute value.
+	 */
+	foreach ( $fragment_identifier_keys as $fragment_identifier_key ) {
+		if ( isset( $attr[ $fragment_identifier_key ] ) && ! empty( $attr[ $fragment_identifier_key ] ) ) {
+			$fragments[ $fragment_identifier_key ] = $attr[ $fragment_identifier_key ];
+		}
+	}
+
+	/**
+	 * Edge case for Gutenberg block,
+	 * allowing a "custom zoom" to be set
+	 * if a standard zoom level isn't sufficient.
+	 */
+	if ( isset( $attr['zoom'] ) && 'custom' === $attr['zoom'] && isset( $attr['customZoom'] ) ) {
+		$fragments['zoom'] = $attr['customZoom'];
+	}
+
+	/**
+	 * Build the fragment identifier string in the way that PDF.js viewer expects.
+	 *
+	 * Multiple values of either type can be combined by
+	 * separating with an ampersand (&) after the hash (for example: #page=2&zoom=200).
+	 *
+	 * @link https://github.com/mozilla/pdf.js/wiki/Viewer-options
+	 */
+	if ( ! empty( $fragments ) ) {
+		$viewer_url .= '#' . http_build_query( $fragments );
+	}
 
 	/**
 	 * Anchor markup to the fullscreen viewer.
@@ -93,7 +146,7 @@ function pdfjs_generator( $attr ) {
 	 */
 	$fullscreen_link = '';
 
-	if ( 'true' === $attr['fullscreen'] ) {
+	if ( true === pdfjs_string_to_bool( $attr['fullscreen'] ) ) {
 		$fullscreen_link = sprintf(
 			'<a href="%1$s">%2$s</a><br />',
 			esc_url( $viewer_url ),
@@ -176,4 +229,26 @@ function pdfjs_encode_uri_component( $url ) {
 	);
 
 	return strtr( rawurlencode( $url ), $unescape );
+}
+
+/**
+ * Get the string 'true' or 'false from a true boolean value.
+ *
+ * @param bool $variable Value to evaluate as 'true' or 'false'.
+ *
+ * @return string Returns 'true' for true. Returns 'false' otherwise.
+ */
+function pdfjs_bool_to_string( $variable ) {
+	return ( true === pdfjs_string_to_bool( $variable ) ) ? 'true' : 'false';
+}
+
+/**
+ * Get the true boolean value of 'true' or 'false' strings.
+ *
+ * @param mixed $variable Value to evaluate as true or false.
+ *
+ * @return bool Returns true for "1", "true", "on" and "yes". Returns false otherwise.
+ */
+function pdfjs_string_to_bool( $variable ) {
+	return filter_var( $variable, FILTER_VALIDATE_BOOLEAN );
 }
