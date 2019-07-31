@@ -72,42 +72,55 @@ function pdfjs_block_init() {
 			'render_callback' => 'pdfjs_generator',
 			'attributes'      => array(
 				'url'           => array(
+					'type'    => 'string',
 					'default' => '',
 				),
 				'title'         => array(
+					'type'    => 'string',
 					'default' => __( 'Embedded PDF Document', 'pdfjs-viewer-shortcode' ),
 				),
 				'viewer_height' => array(
+					'type'    => 'string',
 					'default' => '1360px',
 				),
 				'viewer_width'  => array(
+					'type'    => 'string',
 					'default' => '100%',
 				),
 				'fullscreen'    => array(
+					'type'    => 'boolean',
 					'default' => true,
 				),
 				'download'      => array(
+					'type'    => 'boolean',
 					'default' => true,
 				),
 				'print'         => array(
+					'type'    => 'boolean',
 					'default' => true,
 				),
 				'openfile'      => array(
+					'type'    => 'boolean',
 					'default' => false,
 				),
 				'page'          => array(
+					'type'    => 'integer',
 					'default' => 1,
 				),
 				'zoom'          => array(
+					'type'    => 'string',
 					'default' => 'auto',
 				),
 				'customZoom'    => array(
+					'type'    => 'string',
 					'default' => '',
 				),
 				'nameddest'     => array(
+					'type'    => 'string',
 					'default' => '',
 				),
 				'pagemode'      => array(
+					'type'    => 'string',
 					'default' => 'none',
 				),
 			),
