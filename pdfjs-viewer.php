@@ -31,6 +31,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'PDFJS_FILE', __FILE__ );
 
 /**
+ * Load plugin textdomain.
+ */
+function pdfjs_load_plugin_textdomain() {
+	load_plugin_textdomain(
+		'pdfjs-viewer-shortcode',
+		false,
+		basename( dirname( PDFJS_FILE ) ) . '/languages'
+	);
+}
+
+add_action( 'plugins_loaded', 'pdfjs_load_plugin_textdomain' );
+
+/**
  * PdfJs Shortcode callback.
  *
  * @param array  $attr    The shortcode attributes.
