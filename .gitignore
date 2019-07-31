@@ -1,1 +1,55 @@
-.idea*
+# Ignore OS files #
+###################
+._*
+.AppleDouble
+.DS_Store
+.DS_Store?
+.LSOverride
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Ignore files specific to IDEs and Editors #
+#############################################
+_notes
+.cache
+.idea
+.project
+.settings
+*.esproj
+*.sublime-*
+*.tmproj
+*.tmproject
+*.vi
+dwsync.xml
+nbproject
+tmtags
+atlassian-ide-plugin.xml
+*.iml
+sftp_config.json
+
+# Miscellaneous garbage to ignore #
+###################################
+.vagrant
+deploy.ini
+*.bak
+*.diff
+*.err
+*.log
+*.orig
+*.rej
+*.sass-cache
+*.sql
+*.swo
+*.swp
+*.zip
+*~
+node_modules
+parameters.yml
+error_log
+
+# Ignore Other VCSs #
+#####################
+.hg
+.svn
