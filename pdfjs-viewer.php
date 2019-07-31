@@ -252,3 +252,15 @@ function pdfjs_bool_to_string( $variable ) {
 function pdfjs_string_to_bool( $variable ) {
 	return filter_var( $variable, FILTER_VALIDATE_BOOLEAN );
 }
+
+/**
+ * Full path to the PDF.js block init file.
+ */
+$pdfjs_block_include = __DIR__ . '/resources/js/blocks/pdfjs.php';
+
+/**
+ * Require the PDF.js block init file if it is readable.
+ */
+if ( is_readable( $pdfjs_block_include ) ) {
+	require $pdfjs_block_include;
+}
